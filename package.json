@@ -1,0 +1,20 @@
+{
+  "name": "api-rest-movies",
+  "version": "1.0.0",
+  "description": "Consumo de Api Rest con JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharlybip/api-rest-movies.git"
+  },
+  "keywords": [],
+  "author": "Carlos Dominguez <sharlybip@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sharlybip/api-rest-movies/issues"
+  },
+  "homepage": "https://github.com/sharlybip/api-rest-movies#readme"
+}
