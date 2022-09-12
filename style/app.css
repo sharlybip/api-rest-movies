@@ -16,6 +16,7 @@
   --lightBlue: #A2EEE5;
   --darkBlue: #8EA2EA;
   --red: #F09D9D;
+  --gray: rgb(225, 221, 221);
 
   --font-family-titles: 'Dosis', sans-serif;
   --font-family-text: 'Red Hat Display', sans-serif;
@@ -104,10 +105,15 @@ button {
 
 .movie-container {
   cursor: pointer;
+  background-color: var(--gray);
+  max-width: 150px;
+  max-height: 200px;
 }
 
 .movie-img {
   border-radius: 8px;
+  
+  margin: 10px;
 }
 
 .categoriesPreview-list, .categories-list {
@@ -140,6 +146,7 @@ button {
 
 .header-title {
   margin-bottom: 16px;
+  background-color: ;
 }
 
 .header-arrow {
@@ -235,6 +242,8 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  background-color: var(--gray);
+  width: fit-content;
 }
 
 .category-title::before {

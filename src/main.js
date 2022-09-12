@@ -20,7 +20,8 @@ function renderMovies(father, movies) {
         movieContainer.className = 'movie-container';
         movieContainer.addEventListener('click', () => {
             location.hash = '#movie=' + movie.id;
-        })
+        });
+        movieContainer.style.background = 'none'
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute(
@@ -40,6 +41,7 @@ function renderCategories(father, categories) {
         
         const categoryTitle = document.createElement('h3');
         categoryTitle.classList.add('category-title');
+        categoryTitle.style.background = ('none');
         categoryTitle.setAttribute("id", 'id' + category.id);
         categoryTitle.addEventListener('click', () => {
             location.hash = `#category=${category.id}-${category.name}` 
