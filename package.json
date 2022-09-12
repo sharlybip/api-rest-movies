@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/sharlybip/api-rest-movies/issues"
   },
-  "homepage": "https://github.com/sharlybip/api-rest-movies#readme"
+  "homepage": "https://github.com/sharlybip/api-rest-movies#readme",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
 }
