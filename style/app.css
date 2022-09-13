@@ -4,10 +4,10 @@
 :root {
   --purple-light-1: #FBFAFB;
   --purple-light-2: #EEEAF2;
-  --purple-medium-1: #AA83C8;
-  --purple-medium-2: #8B48BF;
-  --purple-medium-3: #5C218A;
-  --purple-dark-1: #3E0F64;
+  --purple-medium-1: #4e0ecf;
+  --purple-medium-2: #bcb39a;
+  --purple-medium-3: #0707b1;
+  --purple-dark-1: #0306a7;
   --purple-dark-2: #2A0646;
 
   --yellow: #EECC75;
@@ -26,9 +26,7 @@
   --font-weight-text2: 500;
 }
 
-html {
-  background-color: var(--purple-medium-3);
-}
+
 
 body {
   background-color: var(--purple-light-1);
@@ -106,14 +104,13 @@ button {
 .movie-container {
   cursor: pointer;
   background-color: var(--gray);
-  max-width: 150px;
-  max-height: 200px;
+  width: 150px;
+  height: 225px;
+  border-radius: 8px;
 }
 
 .movie-img {
   border-radius: 8px;
-  
-  margin: 10px;
 }
 
 .categoriesPreview-list, .categories-list {
@@ -138,6 +135,17 @@ button {
   position: fixed;
   top: 0;
   width: 100%;
+  opacity: .6;
+}
+.movie-poster-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  opacity: 1;
+  width: 300px;
+  opacity: .9;
+  background-color: var(--gray);
 }
 
 .header-container--categoryView {
@@ -146,7 +154,6 @@ button {
 
 .header-title {
   margin-bottom: 16px;
-  background-color: ;
 }
 
 .header-arrow {
@@ -214,6 +221,34 @@ button {
   height: 241px;
   padding-left: 24px;
   padding-bottom: 16px;
+  scrollbar-width: none;
+  
+  transition: transform 10s linear;
+}
+.trendingPreview-movieList::scrollbar{
+  transition: transform 1s linear;
+}
+.trendingPreview-movieList::-webkit-scrollbar {
+  display: none;
+}
+.trendingPreview-container {
+  position: relative;
+}
+.left-arrow {
+  display: inline-block;
+  position: absolute;
+  top: 130px;
+  right: 0;
+  background-color: #ffffff74;
+}
+.right-arrow {
+  display: inline-block;
+  position: absolute;
+  top: 130px;
+  left: 10px;
+  transform: rotate(180deg);
+  background-color:  #ffffff74;
+
 }
 
 .trendingPreview-movieList .movie-container {
@@ -234,6 +269,10 @@ button {
 /* Categories */
 .category-container {
   width: 45%;
+  background-color: var(--gray);
+  margin-bottom: 2px;
+  color: var(--gray);
+  border-radius: 8px;
 }
 
 .category-title {
@@ -242,7 +281,6 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background-color: var(--gray);
   width: fit-content;
 }
 
@@ -281,14 +319,17 @@ button {
 .genericList-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
-  padding: 32px 24px;
+  padding-top: 24px;
 }
+
 
 .genericList-container .movie-container {
   display: inline-block;
-  width: 47.5%;
+  width: 150px;
+  height: 225px;
+  margin: 0 0 8px 0;
 }
 
 .genericList-container .movie-img {
@@ -305,13 +346,23 @@ button {
   z-index: 1;
   position: absolute;
   background-color: var(--purple-light-1);
+  width: 100%;
+  height: fit-content;
+  scrollbar-width: none;
 }
+.movieDetail-container::webkit-scrollbar {
+  display: none;
+}
+
 
 .movieDetail-title {
   display: inline-block;
   width: 80%;
   margin: 0 0 16px 0;
   padding: 0;
+  background-color: var(--gray);
+  color: var(--gray);
+  border-radius: 4px;
 }
 
 .movieDetail-score {
@@ -319,6 +370,9 @@ button {
   text-align: right;
   width: 18%;
   font-weight: var(--font-weight-title2);
+  background-color: var(--gray);
+  color: var(--gray);
+  border-radius: 4px;
 }
 .movieDetail-score::before {
   content: '★';
@@ -328,6 +382,9 @@ button {
 
 .movieDetail-description {
   margin: 0 0 24px 0;
+  background-color: var(--gray);
+  color: var(--gray);
+  border-radius: 4px;
 }
 
 .relatedMovies-container {
@@ -340,12 +397,12 @@ button {
 }
 
 .relatedMovies-scrollContainer {
-  position: absolute;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
   width: calc(100vw - 24px);
   padding-bottom: 16px;
+  width: 100%;
 }
 
 .relatedMovies-scrollContainer .movie-container {
@@ -354,12 +411,12 @@ button {
 }
 
 .relatedMovies-scrollContainer .movie-img {
-  width: 125px;
-  min-width: 125px;
-  max-width: 125px;
-  height: 187.5px;
-  min-height: 187.5px;
-  max-height: 187.5px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  height: 225px;
+  min-height: 225px;
+  max-height: 225px;
 }
   
 

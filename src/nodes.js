@@ -27,3 +27,6 @@ const trendingBtn = document.querySelector('.trendingPreview-btn');
 const movieDetailTitle = document.querySelector('.movieDetail-title');
 const movieDetailDescription = document.querySelector('.movieDetail-description');
 const movieDetailScore = document.querySelector('.movieDetail-score');
+const bodyRelative = document.querySelector('body');
+const footer = document.querySelector('footer');
+const imgCenter = document.querySelector('.movie-poster-center');

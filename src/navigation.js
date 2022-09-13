@@ -1,3 +1,4 @@
+
 document.querySelector('form').addEventListener('submit', (event)=> {
     event.preventDefault();
 });
@@ -89,7 +90,7 @@ function navigator() {
         homePage();
         page = 1;
     }
-    // ducument.body.scrollTop = 1;
+    //ducument.body.scrollTop = 1;
     document.documentElement.scrollTop = 1;
 }
 function homePage() {
@@ -108,13 +109,15 @@ function homePage() {
     categoriesPreviewSection.classList.remove('inactive');
     genericSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
+    imgCenter.classList.add('inactive');
+    footer.classList.remove('inactive');
 
     getTrendingMoviesPreview();
     getCategoriesPreview();
 }
 function categoriesPage() {
     console.log('CATEGORY');
-    headerSection.scrollTop = 1;
+    // headerSection.scrollTop = 1;
 
     headerSection.classList.remove('header-container--long');
     headerSection.style.background = '';
@@ -129,6 +132,8 @@ function categoriesPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+    imgCenter.classList.add('inactive');
+    footer.classList.remove('inactive');
 
     const [_, categoryData] = location.hash.split ('=');
     const [categoryId, categoryName] = categoryData.split('-');
@@ -154,6 +159,12 @@ function movieDetailsPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
+    footer.classList.add('inactive');
+    bodyRelative.style.position = 'relative';
+    imgCenter.classList.remove('inactive');
+
+
+
     const [_, movieId] = location.hash.split ('=');
     getMovieById(movieId);
 }
@@ -173,6 +184,9 @@ function searchPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+    footer.classList.remove('inactive');
+    
+    imgCenter.classList.add('inactive');
 
     const [_, query] = location.hash.split ('=');
     getMoviesBySearch(query);
@@ -196,6 +210,9 @@ function trendsPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+    footer.classList.remove('inactive');
+    
+    imgCenter.classList.add('inactive');
     nextPage.innerHTML = "Sigueinte página";
 
     headerCategoryTitle.innerHTML = 'Tendencias';

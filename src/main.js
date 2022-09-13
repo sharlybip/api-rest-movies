@@ -8,7 +8,16 @@ const api = axios.create({
     }
 });
 
-
+function scroll(element) {
+    element.addEventListener('wheel', (event) => {
+        event.preventDefault();
+       
+        element.scrollBy({
+          left: event.deltaY < 0 ? -200 : 200, //es un operador condicionl(ternario)- condition ? val1 : val2
+          
+        });
+      });
+}
 nextPage.onclick = () => {
     page = Number(sumPage(1));
     getTrendingMovies();
@@ -21,7 +30,6 @@ function renderMovies(father, movies) {
         movieContainer.addEventListener('click', () => {
             location.hash = '#movie=' + movie.id;
         });
-        movieContainer.style.background = 'none'
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute(
@@ -41,7 +49,7 @@ function renderCategories(father, categories) {
         
         const categoryTitle = document.createElement('h3');
         categoryTitle.classList.add('category-title');
-        categoryTitle.style.background = ('none');
+        categoryContainer.style.background = ('none');
         categoryTitle.setAttribute("id", 'id' + category.id);
         categoryTitle.addEventListener('click', () => {
             location.hash = `#category=${category.id}-${category.name}` 
@@ -61,6 +69,29 @@ async function getTrendingMoviesPreview() {
     // console.log(movies);
     // console.log(data);
     renderMovies(trendingMoviesPreviewList, movies);
+    const rightArrow = document.createElement('button');
+    const leftArrow = document.createElement('button');
+    rightArrow.className = 'right-arrow';
+    leftArrow.className = 'left-arrow';
+    const imgArrowL = document.createElement('img');
+    const imgArrowR = document.createElement('img');
+    imgArrowL.src = "images/flecha-correcta.png";
+    imgArrowR.src = "images/flecha-correcta.png";
+
+    rightArrow.appendChild(imgArrowR);
+    leftArrow.appendChild(imgArrowL);
+    trendingPreviewSection.appendChild(rightArrow);
+    trendingPreviewSection.appendChild(leftArrow);
+
+    scroll(trendingMoviesPreviewList);
+    rightArrow.addEventListener('click', () => {
+        trendingMoviesPreviewList.scrollLeft-= 150;
+        // trendingMoviesPreviewList.style.transition = 'scroll 10s linear';
+        // trendingMoviesPreviewList.scrollLeft -= 150;
+    });
+    leftArrow.addEventListener('click', () => {
+        trendingMoviesPreviewList.scrollLeft += 150;
+    });
 }
 
 async function getCategoriesPreview() {
@@ -112,9 +143,17 @@ async function getMovieById(movieId) {
         rgba(0, 0, 0, 0) 29.17%
       ),
       url(${movieImgUrl})`;
+    const imgCenter = document.querySelector('.movie-poster-center');
+    imgCenter.src = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
     movieDetailTitle.textContent = movie.title;
+    movieDetailTitle.style.color = '#000000';
+    movieDetailTitle.style.background = 'none';
     movieDetailDescription.textContent = movie.overview;
+    movieDetailDescription.style.color = '#000000';
+    movieDetailDescription.style.background = 'none';
     movieDetailScore.textContent = movie.vote_average;
+    movieDetailScore.style.color = '#000000';
+    movieDetailScore.style.background = 'none';
     renderCategories(movieDetailCategoriesList, movie.genres);
 
     getRelatedMoviesById(movie.id);
