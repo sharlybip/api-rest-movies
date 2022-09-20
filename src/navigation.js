@@ -1,4 +1,6 @@
-
+let page = 1;
+let maxPage;
+let infiniteScroll;
 document.querySelector('form').addEventListener('submit', (event)=> {
     event.preventDefault();
 });
@@ -64,12 +66,18 @@ arrowBtn.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', navigator, false);
 window.addEventListener('hashchange', navigator, false);
+window.addEventListener('scroll', infiniteScroll, false);
 
 
 
 function navigator() {
-    console.log({ location })
-    page = 1;
+
+    console.log({ location });
+    console.log("infiniteScroll: ",infiniteScroll);
+    if (infiniteScroll) {
+        window.removeEventListener('scroll', infiniteScroll, {passive : false});
+        infiniteScroll = undefined;
+    }
     if (location.hash.startsWith('#trends')){
         trendsPage();
         const sumPageTotal=  Number(sumPage(1));
@@ -78,20 +86,32 @@ function navigator() {
         console.log(memoryBackBtn);   
     } else if (location.hash.startsWith('#search=')) {
         searchPage();
+        const sumPageTotal=  Number(sumPage(1));
+        sumPage(-(sumPageTotal-1));
     } else if (location.hash.startsWith('#movie=')) {
+        
         movieDetailsPage();
+        const sumPageTotal=  Number(sumPage(1));
+        sumPage(-(sumPageTotal-1));
         memoryBackBtn.append(location.hash); 
         console.log(memoryBackBtn);
     } else if (location.hash.startsWith('#category=')) {
         categoriesPage();
+        const sumPageTotal=  Number(sumPage(1));
+        sumPage(-(sumPageTotal-1));
         memoryBackBtn.append(location.hash); 
         console.log(memoryBackBtn);
     } else {
-        homePage();
         page = 1;
+        homePage();
+
     }
     //ducument.body.scrollTop = 1;
     document.documentElement.scrollTop = 1;
+
+    if (infiniteScroll) {
+        window.addEventListener('scroll', infiniteScroll,  {passive : false});
+    }
 }
 function homePage() {
     console.log('Home');
@@ -142,6 +162,7 @@ function categoriesPage() {
     headerCategoryTitle.innerHTML = categoryName.replace('%20', ' ');
 
     getMoviesByCategories(categoryId);
+    infiniteScroll = getPageMoviesByCategories(categoryId);
 }
 function movieDetailsPage() {
     console.log('MOVIE');
@@ -190,9 +211,10 @@ function searchPage() {
 
     const [_, query] = location.hash.split ('=');
     getMoviesBySearch(query);
+    infiniteScroll = getPageMoviesBySearch(query);
+    console.log("infiniteScroll", infiniteScroll);
     memoryBackBtn.append(location.hash); 
     console.log(memoryBackBtn);
-    
 }
 function trendsPage() {
     console.log('TRENDS');
@@ -219,5 +241,6 @@ function trendsPage() {
     
     nextPage.innerHTML = "Sigueinte página";
     getTrendingMovies();
+    infiniteScroll = getPageTrendingMovies;
 }
 

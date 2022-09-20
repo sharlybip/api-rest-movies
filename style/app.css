@@ -205,13 +205,11 @@ button {
   border-radius: 8px;
   height: 40px;
   width: 100px;
-  
-  display: inline-block;
   position: absolute;
-  margin: 0 auto;
-  right: 0;
   left: 0;
-  top: 60px;
+  right: 0;
+  margin: 0 auto;
+  
 }
 
 .trendingPreview-movieList {
@@ -435,4 +433,16 @@ footer {
 /* Navigation */
 .inactive {
   display: none;
+}
+/* Animation */
+.loading {
+  animation: loading-skeleton infinite 1.5s;
+}
+@keyframes loading-skeleton {
+  0%, 100% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 0;
+  }
 }

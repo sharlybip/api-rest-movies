@@ -20,10 +20,29 @@ function scroll(element) {
 }
 nextPage.onclick = () => {
     page = Number(sumPage(1));
-    getTrendingMovies();
+    getPageTrendingMovies();
 }
-function renderMovies(father, movies) {
-    father.innerHTML = '';
+const lazyLoader = new IntersectionObserver((entries)=>{
+    entries.forEach((entry)=> {
+        // console.log(entry.target.setAttribute);
+        if(entry.isIntersecting) {
+            const url = entry.target.getAttribute('data-img');
+            entry.target.setAttribute('src', url);
+            }
+
+    });
+});
+function renderMovies(
+    father, 
+    movies, 
+    { 
+        lazyLoad = false, 
+        clean = true 
+    }={}) {
+    if (clean){
+        father.innerHTML = '';
+    }
+
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
         movieContainer.className = 'movie-container';
@@ -32,17 +51,23 @@ function renderMovies(father, movies) {
         });
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
-        movieImg.setAttribute(
-            'src',
-            'https://image.tmdb.org/t/p/w300/' + movie.poster_path            
-            );
+        movie.poster_path 
+            ? movieImg.setAttribute(
+                lazyLoad ? 'data-img' : 'src',
+                'https://image.tmdb.org/t/p/w300/' + movie.poster_path            
+                )
+                : movieImg.setAttribute('src', '../images/419f2f4e9f692869a91cab3bf87506a0.jpg')
+            if (lazyLoad) {
+                lazyLoader.observe(movieImg);
+            }
             movieContainer.appendChild(movieImg);
             father.appendChild(movieContainer);
     });
     
 }
 function renderCategories(father, categories) {
-    father.innerHTML = ''; 
+    father.innerHTML = '';
+
     categories.forEach(category => {   
         const categoryContainer = document.createElement('div');
         categoryContainer.className = 'category-container';
@@ -62,13 +87,13 @@ function renderCategories(father, categories) {
         father.appendChild(categoryContainer);
     });
 }
-let page = 1;
+
 async function getTrendingMoviesPreview() {
     const { data }= await api(`/trending/movie/day?&page=${page}&`);
     const movies = data.results;
     // console.log(movies);
-    // console.log(data);
-    renderMovies(trendingMoviesPreviewList, movies);
+    console.log(data);
+    renderMovies(trendingMoviesPreviewList, movies, {lazyLoad: true});
     const rightArrow = document.createElement('button');
     const leftArrow = document.createElement('button');
     rightArrow.className = 'right-arrow';
@@ -107,31 +132,107 @@ async function getMoviesByCategories(id) {
         },
     });
     const movies = data.results;
+    maxPage = data.total_pages;
     // console.log(movies);
     // console.log(data);
-    renderMovies(genericSection, movies);
+    renderMovies(genericSection, movies, {lazyLoad: true, clean: true});
+
+}
+function getPageMoviesByCategories(id) {
+    return async function () {
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement;
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 5);
+        const pageIsNotMax = page < maxPage;
+    
+        if (scrollIsBottom && pageIsNotMax) {
+            page = Number(sumPage(1));
+            // console.log(page);
+            const { data }= await api('discover/movie', {
+                params: {
+                    with_genres: id,
+                    page,
+                },
+            });
+            const movies = data.results;
+            // console.log(movies);
+            // console.log(data);
+            renderMovies(genericSection, movies, {lazyLoad: true, clean: false});
+        }
+    }
+    
 
 }
 async function getMoviesBySearch(query) {
     const { data }= await api('/search/movie', {
         params: {
             query,
+            page,
         },
     });
+    console.log(data);
     const movies = data.results;
-    // console.log(movies);
-    // console.log(data);
-    renderMovies(genericSection, movies);
-
+    maxPage = data.total_pages;
+    console.log(maxPage);
+    // console.log(" getMovies inicial: ",movies);
+    renderMovies(genericSection, movies, {lazyLoad: true, clean: true});
 }
-async function getTrendingMovies() {
+function getPageMoviesBySearch(query) {
+    return async function () {
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement;
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 5);
+        const pageIsNotMax = page < maxPage;
+    
+        if (scrollIsBottom && pageIsNotMax) {
+            page = Number(sumPage(1));
+            // console.log(page);
+            const { data }= await api('/search/movie', {
+                params: {
+                    query,
+                    page,
+                },
+            });
+            const movies = data.results;
+            console.log(" getMovies scroll: ",movies);
+        // console.log(data);
+            renderMovies(genericSection, movies, {lazyLoad: true, clean: false});
+        }
+    }
+    
+    
+}
+async function getTrendingMovies() {  
     const { data }= await api(`/trending/movie/day?&page=${page}&`);
     const movies = data.results;
-    // console.log(movies);
-    // console.log(data);
-    renderMovies(genericSection, movies);
 
-    
+    // console.log(movies);
+    maxPage =  data.total_pages;
+    renderMovies(genericSection, movies, {lazyLoad:true, clean:true});    
+}
+async function getPageTrendingMovies() {  
+
+    const {
+        scrollTop,
+        scrollHeight,
+        clientHeight
+    } = document.documentElement;
+    const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15);
+    const pageIsNotMax = page < maxPage;
+
+    if (scrollIsBottom && pageIsNotMax) {
+        page = Number(sumPage(1));
+        const { data }= await api(`/trending/movie/day?&page=${page}&`);
+        const movies = data.results;
+        renderMovies(genericSection, movies, {lazyLoad:true, clean:false});
+    }
+        
 }
 async function getMovieById(movieId) {
     const { data: movie }= await api(`/movie/${movieId}`);
