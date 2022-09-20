@@ -89,15 +89,21 @@ button {
 
 
 /* Shared */
-.header-container, .trendingPreview-header, .categoriesPreview-container {
+.header-container, 
+.trendingPreview-header, 
+.categoriesPreview-container, 
+.liked-container {
   padding: 0 24px;
 }
 
-.trendingPreview-container, .categoriesPreview-container, footer {
+.trendingPreview-container, 
+.categoriesPreview-container, 
+footer, 
+.liked-container {
   margin-top: 48px;
 }
 
-.trendingPreview-header, .categoriesPreview-title {
+.trendingPreview-header, .categoriesPreview-title, .liked-title {
   margin-bottom: 24px;
 }
 
@@ -107,10 +113,37 @@ button {
   width: 150px;
   height: 225px;
   border-radius: 8px;
+  position: relative;
 }
 
 .movie-img {
   border-radius: 8px;
+}
+
+.movie-btn {
+  position: absolute;
+  inset-block-start: 5px;
+  inset-inline-end: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  padding: 0;
+  margin: 0;
+
+}
+.movie-btn::before{
+  content: '🤍';
+
+}
+.movie-btn--liked {
+  background-color: var(--purple-light-2);
+  box-shadow: 0px 0px 10px 2px var(--purple-dark-1);
+}
+.movie-btn--liked::before{
+  content: '🧡';
+
+}'
+
 }
 
 .categoriesPreview-list, .categories-list {
@@ -190,7 +223,8 @@ button {
 
 
 /* Trending */
-.trendingPreview-header {
+.trendingPreview-header, 
+.liked-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -212,7 +246,8 @@ button {
   
 }
 
-.trendingPreview-movieList {
+.trendingPreview-movieList, 
+.liked-movieList {
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
@@ -223,10 +258,12 @@ button {
   
   transition: transform 10s linear;
 }
-.trendingPreview-movieList::scrollbar{
+.trendingPreview-movieList::scrollbar,
+.liked-movieList::scrollbar{
   transition: transform 1s linear;
 }
-.trendingPreview-movieList::-webkit-scrollbar {
+.trendingPreview-movieList::-webkit-scrollbar,
+.liked-movieList::-webkit-scrollbar {
   display: none;
 }
 .trendingPreview-container {
@@ -249,12 +286,14 @@ button {
 
 }
 
-.trendingPreview-movieList .movie-container {
+.trendingPreview-movieList .movie-container,
+.liked-movieList .movie-container {
   display: inline-block;
   margin-right: 8px;
 }
 
-.trendingPreview-movieList .movie-container .movie-img {
+.trendingPreview-movieList .movie-container .movie-img,
+.liked-movieList .movie-container .movie-img {
   height: 225px;
   min-height: 225px;
   max-height: 225px;

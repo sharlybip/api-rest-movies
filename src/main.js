@@ -1,3 +1,5 @@
+//Data
+
 const api = axios.create({
     baseURL: `https://api.themoviedb.org/3`,
     headers: {
@@ -7,6 +9,11 @@ const api = axios.create({
         'api_key': API_KEY,
     }
 });
+
+function likeMovie(movie){
+    if(movie)
+}
+
 
 function scroll(element) {
     element.addEventListener('wheel', (event) => {
@@ -18,6 +25,8 @@ function scroll(element) {
         });
       });
 }
+scroll(trendingMoviesPreviewList);
+scroll(likedList);
 nextPage.onclick = () => {
     page = Number(sumPage(1));
     getPageTrendingMovies();
@@ -46,9 +55,6 @@ function renderMovies(
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
         movieContainer.className = 'movie-container';
-        movieContainer.addEventListener('click', () => {
-            location.hash = '#movie=' + movie.id;
-        });
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movie.poster_path 
@@ -57,11 +63,29 @@ function renderMovies(
                 'https://image.tmdb.org/t/p/w300/' + movie.poster_path            
                 )
                 : movieImg.setAttribute('src', '../images/419f2f4e9f692869a91cab3bf87506a0.jpg')
-            if (lazyLoad) {
-                lazyLoader.observe(movieImg);
-            }
-            movieContainer.appendChild(movieImg);
-            father.appendChild(movieContainer);
+        movieImg.addEventListener('error', ()=> {
+            movieImg.setAttribute(
+                'src',
+                '../images/419f2f4e9f692869a91cab3bf87506a0.jpg'
+            )
+        });
+        movieImg.addEventListener('click', () => {
+            location.hash = '#movie=' + movie.id;
+        });
+        const movieBtn = document.createElement('button');
+        movieBtn.classList.add('movie-btn');
+        movieBtn.addEventListener('click', ()=>{
+            movieBtn.classList.toggle('movie-btn--liked');
+            likeMovie(movie);
+        });
+
+
+        if (lazyLoad) {
+            lazyLoader.observe(movieImg);
+        }
+        movieContainer.appendChild(movieImg);
+        movieContainer.appendChild(movieBtn);
+        father.appendChild(movieContainer);
     });
     
 }
@@ -108,7 +132,7 @@ async function getTrendingMoviesPreview() {
     trendingPreviewSection.appendChild(rightArrow);
     trendingPreviewSection.appendChild(leftArrow);
 
-    scroll(trendingMoviesPreviewList);
+    
     rightArrow.addEventListener('click', () => {
         trendingMoviesPreviewList.scrollLeft-= 150;
         // trendingMoviesPreviewList.style.transition = 'scroll 10s linear';
