@@ -7,13 +7,34 @@ const api = axios.create({
     },
     params: {
         'api_key': API_KEY,
+        'language': navigator.language || 'es-MX',
     }
 });
 
-function likeMovie(movie){
-    if(movie)
+function likedMovieList(){
+    const item = JSON.parse(localStorage.getItem('liked_movies'));
+    let movies;
+
+    if(item) {
+        movies = item; 
+    } else {
+        movies = {};
+    }
+    return movies;
 }
 
+function likeMovie(movie){
+
+    const likedMovies = likedMovieList();
+    if(likedMovies[movie.id]) {
+        likedMovies[movie.id] =undefined;
+    } else {
+        likedMovies[movie.id] = movie;
+    }
+    localStorage.setItem('liked_movies',JSON.stringify(likedMovies));
+    console.log(JSON.parse(localStorage.getItem('liked_movies')));
+}
+// Utils
 
 function scroll(element) {
     element.addEventListener('wheel', (event) => {
@@ -51,7 +72,7 @@ function renderMovies(
     if (clean){
         father.innerHTML = '';
     }
-
+    const likedMovie = likedMovieList();
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
         movieContainer.className = 'movie-container';
@@ -73,10 +94,16 @@ function renderMovies(
             location.hash = '#movie=' + movie.id;
         });
         const movieBtn = document.createElement('button');
+        
+        if (likedMovie[movie.id]){
+            movieBtn.classList.add('movie-btn--liked');
+        }
         movieBtn.classList.add('movie-btn');
+        if(localStorage)
         movieBtn.addEventListener('click', ()=>{
             movieBtn.classList.toggle('movie-btn--liked');
             likeMovie(movie);
+            getLikedMovies();
         });
 
 
@@ -203,6 +230,14 @@ async function getMoviesBySearch(query) {
     console.log(maxPage);
     // console.log(" getMovies inicial: ",movies);
     renderMovies(genericSection, movies, {lazyLoad: true, clean: true});
+    if (movies.length === 0 ) {
+        const error = document.createElement('span');
+        error.textContent = 'Lo sentimos no pudimos encontrar ningun resultado, intenta con otro nombre...';
+        error.style.fontSize = '30px';
+        error.style.textAlign = 'center';
+        genericSection.appendChild(error);
+        genericSection.style.height = '67.7vh';
+    }
 }
 function getPageMoviesBySearch(query) {
     return async function () {
@@ -288,6 +323,34 @@ async function getRelatedMoviesById(id) {
     const { data}= await api(`/movie/${id}/recommendations`);
     const relatedMovies = data.results;
     renderMovies(relatedMoviesContainer, relatedMovies);
+}
+
+function getLikedMovies() {
+    const likedMovie = likedMovieList();
+    moviesArray = Object.values(likedMovie);
+    
+    renderMovies(likedList, moviesArray, {lazyLoad: true, clean:true});
+    const rightArrow = document.createElement('button');
+    const leftArrow = document.createElement('button');
+    rightArrow.className = 'right-arrow';
+    leftArrow.className = 'left-arrow';
+    const imgArrowL = document.createElement('img');
+    const imgArrowR = document.createElement('img');
+    imgArrowL.src = "images/flecha-correcta.png";
+    imgArrowR.src = "images/flecha-correcta.png";
+
+    rightArrow.appendChild(imgArrowR);
+    leftArrow.appendChild(imgArrowL);
+    likedMoviesSection.appendChild(rightArrow);
+    likedMoviesSection.appendChild(leftArrow);
+    rightArrow.addEventListener('click', () => {
+        likedList.scrollLeft-= 150;
+        // trendingMoviesPreviewList.style.transition = 'scroll 10s linear';
+        // trendingMoviesPreviewList.scrollLeft -= 150;
+    });
+    leftArrow.addEventListener('click', () => {
+        likedList.scrollLeft += 150;
+    });
 }
 const pagesPP = () => {
     var savePage = 1;
